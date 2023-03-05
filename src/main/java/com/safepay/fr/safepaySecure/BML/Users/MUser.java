@@ -1,17 +1,24 @@
 package com.safepay.fr.safepaySecure.BML.Users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.safepay.fr.safepaySecure.BML.Paiement.MBilling;
 import com.safepay.fr.safepaySecure.BML.Transaction.MTransaction;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
+
 @Table(name = "users")
+@NoArgsConstructor()
+@AllArgsConstructor()
 @Entity
 @Data
 public class MUser  implements Serializable {
@@ -19,17 +26,38 @@ public class MUser  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @NotNull(message = "Le champ firstname est obligatoire")
+    @NotBlank(message = "Le champ firstname ne peut etre vide")
+    @Column(nullable = false)
     private String firstname;
+    @NotNull(message = "Le champ lastname est obligatoire")
+    @NotBlank(message = "Le champ lastname ne peut etre vide")
+    @Column(nullable = false)
     private String lastname;
-    @Column(unique = true)
+    @NotNull(message = "Le champ email est obligatoire")
+    @NotBlank(message = "Le champ email ne peut etre vide")
+    @Email
+    @Column(unique = true,nullable = false)
     private String email;
-    @Column(unique = true)
+    @NotNull(message = "Le champ phone est obligatoire")
+    @NotBlank(message = "Le champ phone ne peut etre vide")
+    @Column(unique = true,nullable = false)
     private  String phone;
+    @NotNull(message = "Le champ password est obligatoire")
+    @NotBlank(message = "Le champ password ne peut etre vide")
+    @Column(nullable = false)
     private String password;
+
+    @Transient
+    private String countryCode;
+    @Column(nullable = true)
     private  Boolean useWeb3;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false,cascade=CascadeType.ALL)
-    @JoinColumn(name = "role_id" , nullable = false )
+    @Column(name = "isActive" , nullable = true)
+    private  Boolean isActive;
+    @Column(name = "isCeritifed" , nullable = true)
+    private Boolean isCertifed;
+    @OneToOne
     private MRole role;
 
     @OneToOne()
@@ -39,73 +67,13 @@ public class MUser  implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<MTransaction> transactions;
 
-    public MUser(String firstname, String lastname, String email, String password, Boolean useWeb3, MRole role) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.useWeb3 = useWeb3;
-        this.role = role;
-    }
-
-    public MUser() {
-
-    }
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getUseWeb3() {
-        return useWeb3;
-    }
-
-    public void setUseWeb3(Boolean useWeb3) {
-        this.useWeb3 = useWeb3;
-    }
-
-    public MRole getRole() {
-        return role;
-    }
-    @JsonIgnore()
-    public void setRole(MRole role) {
-        this.role = role;
-    }
 }

@@ -2,9 +2,12 @@ package com.safepay.fr.safepaySecure.BML.Commande;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Table(name = "detail")
 @Entity
@@ -18,10 +21,15 @@ public class MDetail  implements Serializable {
     private long quantity;
     private long price;
     private String description;
-    @Column(name = "created_at")
-    private Date createdAT;
     @Column(name = "keyword")
     private String Keyword ;
     @Column(nullable = true)
     private String address;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 }
