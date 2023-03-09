@@ -15,9 +15,7 @@ public class roleController {
 
     @Autowired
     private LRoleService lRoleService;
-
-
-
+    
     @PostMapping()
     public ReturnMessage save(@Validated @RequestBody MRole  mRole) {
         ReturnMessage message = new ReturnMessage();

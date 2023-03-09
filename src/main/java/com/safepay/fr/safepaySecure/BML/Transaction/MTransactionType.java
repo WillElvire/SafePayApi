@@ -16,7 +16,6 @@ public class MTransactionType implements Serializable {
     private String id;
     private String name;
     private String libelle;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;

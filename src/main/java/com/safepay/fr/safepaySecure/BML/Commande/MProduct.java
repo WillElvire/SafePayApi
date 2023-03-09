@@ -1,4 +1,6 @@
 package com.safepay.fr.safepaySecure.BML.Commande;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,8 +19,12 @@ public class MProduct  implements Serializable {
     @GeneratedValue(strategy =  GenerationType.UUID)
     @Column(name = "product_id")
     private  String id;
-    @OneToOne()
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     private MDetail detail;
+    @ManyToOne()
+    @JsonBackReference
+    @JoinColumn(name = "user_id" , nullable = false )
+    private MUser poster;
     private boolean isActive;
     private boolean isVerify;
     @CreationTimestamp

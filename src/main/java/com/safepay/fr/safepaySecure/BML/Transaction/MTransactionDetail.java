@@ -27,7 +27,6 @@ public class MTransactionDetail implements Serializable {
     public MBilling billing;
     public boolean isValid;
 
-
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;

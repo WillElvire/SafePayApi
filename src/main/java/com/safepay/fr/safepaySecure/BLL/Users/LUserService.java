@@ -26,13 +26,38 @@ public class LUserService implements IService<MUser> {
     }
 
     //get list
-    public List<MUser> findAll() {
-        return (List<MUser>) this.aUserRepository.findAll();
+    public ReturnMessage findAll() {
+
+        ReturnMessage message = new ReturnMessage();
+        try
+        {
+            var users = this.aUserRepository.findAll();
+            message.setCode(HttpStatus.ACCEPTED);
+            message.setReturnObject(users);
+
+        }catch (Exception e) {
+
+            message.setMessage(e.getMessage());
+            message.setCode(HttpStatus.BAD_REQUEST);
+        }
+        return  message;
     }
 
     @Override
-    public Optional<MUser> findById(String id) {
-        return this.aUserRepository.findById(id);
+    public ReturnMessage findById(String id) {
+        ReturnMessage message = new ReturnMessage();
+        try
+        {
+            var user = this.aUserRepository.findById(id);
+            message.setCode(HttpStatus.ACCEPTED);
+            message.setReturnObject(user);
+
+        }catch (Exception e) {
+
+             message.setMessage(e.getMessage());
+             message.setCode(HttpStatus.BAD_REQUEST);
+        }
+        return  message;
     }
 
     @Override
@@ -48,10 +73,11 @@ public class LUserService implements IService<MUser> {
         try {
 
             int userEmailCount =  aUserRepository.countByEmail(mUser.getEmail());
-            if(userEmailCount == 0 ) {
+            if(userEmailCount == 0 )
+            {
                 int userNumberCount = aUserRepository.countByPhone(phone);
-                if(userNumberCount == 0) {
-
+                if(userNumberCount == 0)
+                {
                     String encodedPassword = this.passwordEncoder.encode(mUser.getPassword());
                     mUser.setPassword(encodedPassword);
                     mUser.setPhone(phone);
@@ -62,12 +88,14 @@ public class LUserService implements IService<MUser> {
                     message.setCode(HttpStatus.ACCEPTED);
                     message.setMessage("Utilisateur crée");
                 }
-                else{
+                else
+                {
                     message.setCode(HttpStatus.BAD_REQUEST);
                     message.setMessage("Ce numero de téléphone est deja utilisé");
                 }
 
-            }else {
+            }else
+            {
                 message.setCode(HttpStatus.BAD_REQUEST);
                 message.setMessage("Cette Adresse email est deja utilisé");
             }
@@ -92,22 +120,25 @@ public class LUserService implements IService<MUser> {
         {
             MUser user = this.aUserRepository.findByEmail(mLoginPayload.getEmail());
 
-            if(user != null) {
+            if(user != null)
+            {
                 // check if password matches
                 Boolean isPasswordMatches = passwordEncoder.matches(mLoginPayload.getPassword(),user.getPassword());
                 //return the user
-                if(isPasswordMatches) {
+                if(isPasswordMatches)
+                {
                     message.setCode(HttpStatus.ACCEPTED);
                     message.setReturnObject(user);
-                }else{
+                }else
+                {
                     message.setCode(HttpStatus.BAD_REQUEST);
                     message.setMessage("Vous avez renseigné un mauvais mot de passe veuillez ressayer.");
                 }
-            }else{
+            }else
+            {
                 message.setCode(HttpStatus.BAD_REQUEST);
                 message.setMessage("Veuillez vérifier les informations fournies car elle semble erronée.");
             }
-
         }
         catch (Exception e) {
             message.setCode(HttpStatus.BAD_REQUEST);
@@ -115,6 +146,5 @@ public class LUserService implements IService<MUser> {
         }
         //get the use with the entered email;
         return message;
-
     }
 }

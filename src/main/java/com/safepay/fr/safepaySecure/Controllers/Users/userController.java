@@ -19,9 +19,21 @@ public class userController {
     @Autowired
     LUserService lUserService;
     @GetMapping()
-    public List<MUser> gets() {
-        List<MUser> all = (List<MUser>) lUserService.findAll();
-        return all;
+    public ResponseEntity<ReturnMessage> gets() {
+        var  message = lUserService.findAll();
+        if(message.getCode() == HttpStatus.ACCEPTED) {
+            return ResponseEntity.ok().body(message);
+        }
+        return ResponseEntity.status(message.getCode()).body(message);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReturnMessage> get(@PathVariable(value = "id") String id){
+        var  message = lUserService.findById(id);
+        if(message.getCode() == HttpStatus.ACCEPTED) {
+            return ResponseEntity.ok().body(message);
+        }
+        return ResponseEntity.status(message.getCode()).body(message);
     }
 
     @PostMapping()
@@ -29,19 +41,17 @@ public class userController {
         var  message = lUserService.save(mUser);
         if(message.getCode() == HttpStatus.OK) {
             return ResponseEntity.ok().body(message);
-        } else {
-            return ResponseEntity.status(message.getCode()).body(message);
         }
-
+        return ResponseEntity.status(message.getCode()).body(message);
     }
 
     @PostMapping("login")
-    public ResponseEntity<ReturnMessage> login(@Validated @RequestBody MLoginPayload mLoginPayload) {
+    public ResponseEntity<ReturnMessage> login( @RequestBody MLoginPayload mLoginPayload) {
         var  message = lUserService.login(mLoginPayload);
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
-        } else {
-            return ResponseEntity.status(message.getCode()).body(message);
         }
+        return ResponseEntity.status(message.getCode()).body(message);
+
     }
 }

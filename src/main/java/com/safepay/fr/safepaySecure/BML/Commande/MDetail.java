@@ -17,15 +17,16 @@ public class MDetail  implements Serializable {
     @GeneratedValue(strategy =  GenerationType.UUID)
 
     private String id ;
-    private String title;
+    private String title ;
     private long quantity;
     private long price;
     private String description;
-    @Column(name = "keyword")
+    private String monnaie_echange;
+    private String monnaie_a_recevoir;
+    @Column(name = "keyword",nullable = true)
     private String Keyword ;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String address;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
