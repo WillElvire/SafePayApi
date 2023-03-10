@@ -1,4 +1,4 @@
-package com.safepay.fr.safepaySecure.BML.Commande;
+package com.safepay.fr.safepaySecure.BML.Commande.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class MFullProductDetailDo {
+public class MFullProductDetailDto {
     private String title ;
     private long quantity;
     private long price;

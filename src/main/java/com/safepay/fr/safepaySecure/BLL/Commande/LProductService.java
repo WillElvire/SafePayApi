@@ -1,12 +1,10 @@
 package com.safepay.fr.safepaySecure.BLL.Commande;
 
-import com.safepay.fr.safepaySecure.BLL.Users.LUserService;
 import com.safepay.fr.safepaySecure.BML.Commande.MDetail;
-import com.safepay.fr.safepaySecure.BML.Commande.MFullProductDetailDo;
+import com.safepay.fr.safepaySecure.BML.Commande.Dto.MFullProductDetailDto;
 import com.safepay.fr.safepaySecure.BML.Commande.MProduct;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
-import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.ADetailRepository;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
@@ -25,25 +23,25 @@ public class LProductService implements IService<MProduct> {
     @Autowired
     AUserRepository     aUserRepository;
     @Transactional
-    public ReturnMessage savePublication(MFullProductDetailDo mFullProductDetailDo) {
+    public ReturnMessage savePublication(MFullProductDetailDto mFullProductDetailDto) {
 
         ReturnMessage message = new ReturnMessage();
         try
         {
             MDetail detail = new MDetail();
             MProduct product = new MProduct();
-            detail.setAddress(mFullProductDetailDo.getAddress());
-            detail.setDescription(mFullProductDetailDo.getDescription());
-            detail.setPrice(mFullProductDetailDo.getPrice());
-            detail.setMonnaie_echange(mFullProductDetailDo.getMonnaie_echange());
-            detail.setMonnaie_a_recevoir(mFullProductDetailDo.getMonnaie_a_recevoir());
-            detail.setQuantity(mFullProductDetailDo.getQuantity());
-            detail.setTitle(mFullProductDetailDo.getTitle());
+            detail.setAddress(mFullProductDetailDto.getAddress());
+            detail.setDescription(mFullProductDetailDto.getDescription());
+            detail.setPrice(mFullProductDetailDto.getPrice());
+            detail.setMonnaie_echange(mFullProductDetailDto.getMonnaie_echange());
+            detail.setMonnaie_a_recevoir(mFullProductDetailDto.getMonnaie_a_recevoir());
+            detail.setQuantity(mFullProductDetailDto.getQuantity());
+            detail.setTitle(mFullProductDetailDto.getTitle());
             var newDetail = aDetailRepository.save(detail);
             product.setDetail(newDetail);
-            product.setActive(mFullProductDetailDo.isActive());
-            product.setVerify(mFullProductDetailDo.isVerify());
-            var User = aUserRepository.findById(mFullProductDetailDo.getUserId()).get();
+            product.setActive(mFullProductDetailDto.isActive());
+            product.setVerify(mFullProductDetailDto.isVerify());
+            var User = aUserRepository.findById(mFullProductDetailDto.getUserId()).get();
             product.setPoster(User);
             aProductRepository.save(product);
             message.setCode(HttpStatus.ACCEPTED);
@@ -81,8 +79,7 @@ public class LProductService implements IService<MProduct> {
     public ReturnMessage findTop10Publication() {
         ReturnMessage message = new ReturnMessage();
         try{
-
-            //message.setReturnObject(aProductRepository.findTsopByDetail());
+            message.setReturnObject(aProductRepository.findTop20MProductsByIsActive(false));
             message.setCode(HttpStatus.ACCEPTED);
         }catch (Exception e) {
             message.setCode(HttpStatus.BAD_REQUEST);

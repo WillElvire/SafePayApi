@@ -1,6 +1,9 @@
 package com.safepay.fr.safepaySecure.BML.Paiement;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +14,10 @@ import java.util.List;
 
 @Table(name = "plan")
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class MPlan implements Serializable {
     @Id
     @GeneratedValue(strategy =  GenerationType.UUID)
@@ -19,6 +26,8 @@ public class MPlan implements Serializable {
     private String name;
     private String description;
     private  int  duration ;
+
+    private  float price;
     @OneToMany(mappedBy = "plan")
     private List<MBilling> billing;
     @CreationTimestamp

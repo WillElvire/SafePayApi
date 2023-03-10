@@ -1,7 +1,8 @@
 package com.safepay.fr.safepaySecure.Controllers.Commandes;
 
-import com.safepay.fr.safepaySecure.BLL.Commande.LProductService;
+import com.safepay.fr.safepaySecure.BLL.Commande.LPannierService;
 import com.safepay.fr.safepaySecure.BML.Commande.Dto.MFullProductDetailDto;
+import com.safepay.fr.safepaySecure.BML.Commande.Dto.MPannierDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,16 +11,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/publication")
-public class ProductController {
-
+@CrossOrigin(origins = "*",allowedHeaders = "*")
+@RequestMapping("api/cart")
+public class PannierController {
     @Autowired
-    LProductService lProductService;
+    LPannierService lPannierService;
 
     @PostMapping()
-    public ResponseEntity<ReturnMessage> save(@Validated @RequestBody MFullProductDetailDto mFullProductDetailDto){
-        ReturnMessage message = lProductService.savePublication(mFullProductDetailDto);
+    public ResponseEntity<ReturnMessage> save(@Validated @RequestBody MPannierDto pannierDto){
+        ReturnMessage message = lPannierService.addProductToPannier(pannierDto);
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
         } else {
@@ -29,7 +29,7 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<ReturnMessage> gets(){
-        ReturnMessage message = lProductService.findAll();
+        ReturnMessage message = lPannierService.findAll();
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
         } else {
@@ -37,9 +37,9 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/last")
-    public ResponseEntity<ReturnMessage> gets10Publication(){
-        ReturnMessage message = lProductService.findTop10Publication();
+    @GetMapping("user/{id}")
+    public ResponseEntity<ReturnMessage> getUserCart(@PathVariable("id") String id){
+        ReturnMessage message = lPannierService.findByUserId(id);
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
         } else {
@@ -50,7 +50,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     public ResponseEntity<ReturnMessage> get(@PathVariable("id") String id ){
-        ReturnMessage message = lProductService.findById(id);
+        ReturnMessage message = lPannierService.findById(id);
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
         } else {
@@ -58,23 +58,5 @@ public class ProductController {
         }
     }
 
-    @GetMapping("poster/{id}")
-    public ResponseEntity<ReturnMessage> getByUserId(@PathVariable("id") String id ){
-        ReturnMessage message = lProductService.findMProductsByPosterIds(id);
-        if(message.getCode() == HttpStatus.ACCEPTED) {
-            return ResponseEntity.ok().body(message);
-        } else {
-            return ResponseEntity.status(message.getCode()).body(message);
-        }
-    }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<ReturnMessage> delete(@PathVariable("id") String id){
-        ReturnMessage message = lProductService.deleteByProductId(id);
-        if(message.getCode() == HttpStatus.ACCEPTED) {
-            return ResponseEntity.ok().body(message);
-        } else {
-            return ResponseEntity.status(message.getCode()).body(message);
-        }
-    }
 }

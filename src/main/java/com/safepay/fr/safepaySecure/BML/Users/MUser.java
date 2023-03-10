@@ -1,6 +1,7 @@
 package com.safepay.fr.safepaySecure.BML.Users;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.safepay.fr.safepaySecure.BML.Commande.MPannier;
 import com.safepay.fr.safepaySecure.BML.Commande.MProduct;
 import com.safepay.fr.safepaySecure.BML.Paiement.MBilling;
 import com.safepay.fr.safepaySecure.BML.Transaction.MTransaction;
@@ -63,6 +64,10 @@ public class MUser  implements Serializable {
     private Boolean isCertifed;
     @OneToOne
     private MRole role;
+
+    @OneToOne
+    @JoinColumn(name =  "user_id", nullable = true)
+    private MPannier pannier;
 
     @OneToOne()
     @JoinColumn(name =  "billing_id", nullable = true)

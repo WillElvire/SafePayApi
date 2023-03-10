@@ -27,12 +27,12 @@ public class MPannier  implements Serializable  {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<MProduct> products;
 
+    public  boolean isCheckout;
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-
 
 }
