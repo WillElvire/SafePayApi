@@ -7,6 +7,11 @@ import java.util.List;
 public interface AProductRepository  extends JpaRepository<MProduct,String> {
 
     public List<MProduct> findMProductsByPosterId(String id);
-    public List<MProduct> findTop20MProductsByIsActive(boolean active);
+    public List<MProduct> findTop20MProductsByIsActiveAndIsVerify(boolean active,boolean verify);
+    public List<MProduct> findMProductsByPosterIdAndIsActive(String id , Boolean active);
+    public int countMProductsByPosterId(String id);
+    public int countMProductsByPosterIdAndIsVerify(String id,Boolean verify);
+    public int countMProductsByPosterIdAndIsActive(String id , Boolean active);
+    public List<MProduct> findMProductsByIsActive(boolean active);
 
 }

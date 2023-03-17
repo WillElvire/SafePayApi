@@ -79,7 +79,7 @@ public class LProductService implements IService<MProduct> {
     public ReturnMessage findTop10Publication() {
         ReturnMessage message = new ReturnMessage();
         try{
-            message.setReturnObject(aProductRepository.findTop20MProductsByIsActive(false));
+            message.setReturnObject(aProductRepository.findTop20MProductsByIsActiveAndIsVerify(true , false));
             message.setCode(HttpStatus.ACCEPTED);
         }catch (Exception e) {
             message.setCode(HttpStatus.BAD_REQUEST);

@@ -9,4 +9,5 @@ public interface AAddressRepository  extends CrudRepository<MAddress,String> {
 
     public List<MAddress> findByUserId(String id);
     public int countByAddress(String address);
+    public int countMAddressByUserId(String id);
 }

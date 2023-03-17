@@ -45,6 +45,15 @@ public class userController {
         return ResponseEntity.status(message.getCode()).body(message);
     }
 
+
+    @GetMapping("{id}/report")
+    public ResponseEntity<ReturnMessage> getUserReport(@PathVariable("id") String id) {
+        var message = lUserService.getUserReport(id);
+        if(message.getCode() == HttpStatus.ACCEPTED) {
+            return ResponseEntity.ok().body(message);
+        }
+        return ResponseEntity.status(message.getCode()).body(message);
+    }
     @PostMapping("login")
     public ResponseEntity<ReturnMessage> login( @RequestBody MLoginPayload mLoginPayload) {
         var  message = lUserService.login(mLoginPayload);

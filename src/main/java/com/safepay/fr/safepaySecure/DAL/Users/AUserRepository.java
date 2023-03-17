@@ -9,4 +9,8 @@ public interface AUserRepository  extends CrudRepository<MUser , String> {
    public int   countByEmailOrPhone(String email,String phone);
    public int countByEmail(String email);
    public int countByPhone(String phone);
+
+   public boolean existsByEmail(String email);
+   public boolean existsByPhone(String phone);
+
 }

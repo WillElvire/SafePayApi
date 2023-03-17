@@ -3,26 +3,36 @@ package com.safepay.fr.safepaySecure.BLL.Users;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
+import com.safepay.fr.safepaySecure.BML.Payload.MUserBillingPlan;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
+import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
+import com.safepay.fr.safepaySecure.DAL.Users.AAddressRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class LUserService implements IService<MUser> {
     AUserRepository aUserRepository;
     PasswordEncoder passwordEncoder;
-
+    AAddressRepository addressRepository;
+    AProductRepository aProductRepository;
     /*
      * dependency injection
      */
-    LUserService(AUserRepository aUserRepository){
-        this.passwordEncoder = new BCryptPasswordEncoder();
-        this.aUserRepository = aUserRepository;
+    LUserService(AUserRepository aUserRepository,AAddressRepository addressRepository , AProductRepository aProductRepository){
+        this.passwordEncoder    = new BCryptPasswordEncoder();
+        this.aUserRepository    = aUserRepository;
+        this.addressRepository  = addressRepository;
+        this.aProductRepository = aProductRepository;
     }
 
     //get list
@@ -71,12 +81,11 @@ public class LUserService implements IService<MUser> {
         ReturnMessage message = new ReturnMessage();
         var phone = mUser.getCountryCode() + mUser.getPhone();
         try {
-
-            int userEmailCount =  aUserRepository.countByEmail(mUser.getEmail());
-            if(userEmailCount == 0 )
+            boolean existsByEmail =  aUserRepository.existsByEmail(mUser.getEmail());
+            if(existsByEmail)
             {
-                int userNumberCount = aUserRepository.countByPhone(phone);
-                if(userNumberCount == 0)
+                boolean existsByPhone = aUserRepository.existsByPhone(phone);
+                if(existsByPhone)
                 {
                     String encodedPassword = this.passwordEncoder.encode(mUser.getPassword());
                     mUser.setPassword(encodedPassword);
@@ -113,6 +122,7 @@ public class LUserService implements IService<MUser> {
      * @param mLoginPayload
      * @return
      */
+    @Transactional
     public ReturnMessage login(MLoginPayload mLoginPayload) {
 
         ReturnMessage message =  new ReturnMessage();
@@ -145,6 +155,28 @@ public class LUserService implements IService<MUser> {
             message.setMessage(e.getMessage());
         }
         //get the use with the entered email;
+        return message;
+    }
+
+
+
+
+
+    @Transactional
+    public ReturnMessage getUserReport(String id) {
+        ReturnMessage message = new ReturnMessage();
+        try {
+            Map<String , Number > report = new HashMap<>();
+            report.put("u_p_attente", this.aProductRepository.countMProductsByPosterIdAndIsActive(id , false));
+            report.put("u_p_confirmer", this.aProductRepository.countMProductsByPosterIdAndIsActive(id , true));
+            report.put("u_address", this.addressRepository.countMAddressByUserId(id));
+            report.put("u_p_close",this.aProductRepository.countMProductsByPosterIdAndIsVerify(id , true));
+            message.setCode(HttpStatus.ACCEPTED);
+            message.setReturnObject(report);
+        }catch(Exception ex) {
+            message.setMessage(ex.getMessage());
+            message.setCode(HttpStatus.BAD_REQUEST);
+        }
         return message;
     }
 }

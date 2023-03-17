@@ -1,4 +1,5 @@
 package com.safepay.fr.safepaySecure.Controllers.Users;
+import com.safepay.fr.safepaySecure.BLL.Seeder.LRoleSeederService;
 import com.safepay.fr.safepaySecure.BLL.Users.LRoleService;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Users.MRole;
@@ -15,6 +16,13 @@ public class roleController {
 
     @Autowired
     private LRoleService lRoleService;
+    @Autowired
+    private LRoleSeederService lRoleSeederService;
+
+    roleController(LRoleSeederService lRoleSeederService){
+        lRoleSeederService.seedRole();
+    }
+
     
     @PostMapping()
     public ReturnMessage save(@Validated @RequestBody MRole  mRole) {

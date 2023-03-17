@@ -3,6 +3,7 @@ package com.safepay.fr.safepaySecure.BML.Paiement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Table(name = "billing")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,7 +24,7 @@ public class MBilling implements Serializable {
     @GeneratedValue(strategy =  GenerationType.UUID)
     private String id;
     private boolean isActive;
-    private Date expriationDate;
+    private String expriationDate;
     private  int  status ;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

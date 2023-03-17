@@ -1,12 +1,14 @@
 package com.safepay.fr.safepaySecure.BML.Transaction;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Data
 @Table(name = "transaction_type")
 @Entity
 public class MTransactionType implements Serializable {
