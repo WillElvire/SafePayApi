@@ -67,24 +67,24 @@ public class MUser  implements Serializable {
 
 
     @JsonManagedReference
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name =  "pannier_id", nullable = true)
     private MPannier pannier;
 
     @JsonManagedReference
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name =  "billing_id", nullable = true)
     private MBilling billing;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<MTransaction> transactions;
 
     @JsonManagedReference
-    @OneToMany( mappedBy="user" )
+    @OneToMany( mappedBy="user" ,cascade = CascadeType.ALL)
     private List<MAddress> addresses;
     @JsonManagedReference
-    @OneToMany(mappedBy = "poster")
+    @OneToMany(mappedBy = "poster",cascade = CascadeType.ALL)
     private List<MProduct> products;
     @CreationTimestamp
     @Column(name = "created_at")
