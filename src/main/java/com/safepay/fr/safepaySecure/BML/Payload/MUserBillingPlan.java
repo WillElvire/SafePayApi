@@ -12,5 +12,7 @@ public class MUserBillingPlan {
     private String userId ;
     private String planId;
     private String amount;
+    private String mean_of_payment;
+    private  String address ;
     private String reason = "Plan billing Payment";
 }

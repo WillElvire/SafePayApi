@@ -1,5 +1,6 @@
 package com.safepay.fr.safepaySecure.BML.Paiement;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class MPlan implements Serializable {
     private String name;
     private String description;
     private  int  duration ;
-
     private  float price;
+    @JsonManagedReference
     @OneToMany(mappedBy = "plan")
     private List<MBilling> billing;
     @CreationTimestamp

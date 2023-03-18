@@ -35,5 +35,14 @@ public class TransactionController {
             return ResponseEntity.status(message.getCode()).body(message);
         }
     }
+    @GetMapping("{id}")
+    public ResponseEntity<ReturnMessage> getAllTransactionById(@PathVariable("id") String id) {
+        ReturnMessage message = lTransactionService.getAllTransactionById(id);
+        if(message.getCode() == HttpStatus.ACCEPTED) {
+            return ResponseEntity.ok().body(message);
+        } else {
+            return ResponseEntity.status(message.getCode()).body(message);
+        }
+    }
 
 }

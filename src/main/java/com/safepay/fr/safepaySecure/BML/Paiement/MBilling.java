@@ -1,5 +1,6 @@
 package com.safepay.fr.safepaySecure.BML.Paiement;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,10 +27,13 @@ public class MBilling implements Serializable {
     private boolean isActive;
     private String expriationDate;
     private  int  status ;
-
+    @Column(nullable = true)
+    private String mean_of_payment;
+    @Column(nullable = true)
+    private  String address;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "plan_id" , nullable = false )
     private MPlan plan;
 

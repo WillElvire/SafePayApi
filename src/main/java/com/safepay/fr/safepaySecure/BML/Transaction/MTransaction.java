@@ -21,11 +21,11 @@ public class MTransaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "transaction_type_id")
     public MTransactionType transactionType;
     @JoinColumn(name = "transaction_detail_id")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     public MTransactionDetail transactionDetail;
     @JsonBackReference
     @ManyToOne()

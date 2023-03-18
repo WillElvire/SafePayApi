@@ -1,8 +1,8 @@
 package com.safepay.fr.safepaySecure.Controllers.Users;
 
 import com.safepay.fr.safepaySecure.BLL.Users.LAddressService;
+import com.safepay.fr.safepaySecure.BML.Commande.Dto.MAddressDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
-import com.safepay.fr.safepaySecure.BML.Users.MAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class addressController {
     LAddressService lAddressService;
 
     @PostMapping()
-    public ResponseEntity<ReturnMessage> save(@Validated @RequestBody MAddress address) {
-        ReturnMessage message = lAddressService.save(address);
+    public ResponseEntity<ReturnMessage> save(@Validated @RequestBody MAddressDto mAddressDto) {
+        ReturnMessage message = lAddressService.saveAddress(mAddressDto);
         if(message.getCode() == HttpStatus.OK) {
             return ResponseEntity.ok().body(message);
         } else {

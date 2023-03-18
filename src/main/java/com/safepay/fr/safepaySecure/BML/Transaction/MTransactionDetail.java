@@ -25,10 +25,10 @@ public class MTransactionDetail implements Serializable {
     private String id;
     private String amount;
     public String reason;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id",nullable = true)
     public MPannier cart;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_id",nullable = true)
     public MBilling billing;
     public boolean isValid = false;

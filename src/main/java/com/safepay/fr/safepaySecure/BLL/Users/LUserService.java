@@ -1,5 +1,6 @@
 package com.safepay.fr.safepaySecure.BLL.Users;
 
+import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
@@ -7,6 +8,7 @@ import com.safepay.fr.safepaySecure.BML.Payload.MUserBillingPlan;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AAddressRepository;
+import com.safepay.fr.safepaySecure.DAL.Users.ARoleRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,17 @@ public class LUserService implements IService<MUser> {
     PasswordEncoder passwordEncoder;
     AAddressRepository addressRepository;
     AProductRepository aProductRepository;
+
+    ARoleRepository aRoleRepository;
     /*
      * dependency injection
      */
-    LUserService(AUserRepository aUserRepository,AAddressRepository addressRepository , AProductRepository aProductRepository){
+    LUserService(ARoleRepository aRoleRepository, AUserRepository aUserRepository,AAddressRepository addressRepository , AProductRepository aProductRepository){
         this.passwordEncoder    = new BCryptPasswordEncoder();
         this.aUserRepository    = aUserRepository;
         this.addressRepository  = addressRepository;
         this.aProductRepository = aProductRepository;
+        this.aRoleRepository    = aRoleRepository;
     }
 
     //get list
@@ -77,32 +82,48 @@ public class LUserService implements IService<MUser> {
     }
 
     public ReturnMessage save(MUser mUser) {
+        return null;
+    }
+    @Transactional
+    public ReturnMessage save(MRegisterDto mRegisterDto) {
 
         ReturnMessage message = new ReturnMessage();
-        var phone = mUser.getCountryCode() + mUser.getPhone();
+        var phone = mRegisterDto.getCountryCode() + mRegisterDto.getPhone();
         try {
-            boolean existsByEmail =  aUserRepository.existsByEmail(mUser.getEmail());
-            if(existsByEmail)
+            boolean existsByEmail =  aUserRepository.existsByEmail(mRegisterDto.getEmail());
+            if(!existsByEmail)
             {
                 boolean existsByPhone = aUserRepository.existsByPhone(phone);
-                if(existsByPhone)
+                if(!existsByPhone)
                 {
-                    String encodedPassword = this.passwordEncoder.encode(mUser.getPassword());
-                    mUser.setPassword(encodedPassword);
-                    mUser.setPhone(phone);
-                    mUser.setIsActive(false);
-                    mUser.setIsCertifed(false);
-                    mUser.setUseWeb3(false);
-                    this.aUserRepository.save(mUser);
-                    message.setCode(HttpStatus.ACCEPTED);
-                    message.setMessage("Utilisateur crée");
+                    var role = aRoleRepository.findById(mRegisterDto.getRoleId());
+
+                    if(role.isPresent()) {
+                        MUser mUser = new MUser();
+                        String encodedPassword = this.passwordEncoder.encode(mRegisterDto.getPassword());
+                        mUser.setPassword(encodedPassword);
+                        mUser.setPhone(phone);
+                        mUser.setFirstname(mRegisterDto.getFirstname());
+                        mUser.setLastname(mRegisterDto.getLastname());
+                        mUser.setEmail(mRegisterDto.getEmail());
+                        mUser.setIsActive(false);
+                        mUser.setIsCertifed(false);
+                        mUser.setUseWeb3(true);
+                        mUser.setRole(role.get());
+                        this.aUserRepository.save(mUser);
+                        message.setCode(HttpStatus.ACCEPTED);
+                        message.setMessage("Utilisateur crée");
+                    }else{
+
+                        message.setCode(HttpStatus.BAD_REQUEST);
+                        message.setMessage("Erreur lors de la creation");
+                    }
                 }
                 else
                 {
                     message.setCode(HttpStatus.BAD_REQUEST);
                     message.setMessage("Ce numero de téléphone est deja utilisé");
                 }
-
             }else
             {
                 message.setCode(HttpStatus.BAD_REQUEST);

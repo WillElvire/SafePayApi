@@ -1,5 +1,7 @@
 package com.safepay.fr.safepaySecure.BML.Commande;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,6 +20,7 @@ public class MPannier  implements Serializable  {
     @GeneratedValue(strategy =  GenerationType.UUID)
     @Column(name = "cart_id")
     private String id ;
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private MUser user;

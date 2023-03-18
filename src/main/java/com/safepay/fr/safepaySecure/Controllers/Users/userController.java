@@ -1,6 +1,7 @@
 package com.safepay.fr.safepaySecure.Controllers.Users;
 
 import com.safepay.fr.safepaySecure.BLL.Users.LUserService;
+import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
@@ -37,8 +38,8 @@ public class userController {
     }
 
     @PostMapping()
-    public ResponseEntity<ReturnMessage> add(@Validated @RequestBody MUser mUser) {
-        var  message = lUserService.save(mUser);
+    public ResponseEntity<ReturnMessage> add(@Validated @RequestBody MRegisterDto mRegisterDto) {
+        var  message = lUserService.save(mRegisterDto);
         if(message.getCode() == HttpStatus.OK) {
             return ResponseEntity.ok().body(message);
         }

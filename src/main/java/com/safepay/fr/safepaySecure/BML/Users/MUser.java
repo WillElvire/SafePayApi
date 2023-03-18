@@ -65,9 +65,10 @@ public class MUser  implements Serializable {
     @OneToOne
     private MRole role;
 
+
     @JsonManagedReference
     @OneToOne
-    @JoinColumn(name =  "user_id", nullable = true)
+    @JoinColumn(name =  "pannier_id", nullable = true)
     private MPannier pannier;
 
     @JsonManagedReference

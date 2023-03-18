@@ -5,6 +5,7 @@ import com.safepay.fr.safepaySecure.BML.Paiement.MBilling;
 import com.safepay.fr.safepaySecure.BML.Payload.MUserBillingPlan;
 import com.safepay.fr.safepaySecure.BML.Transaction.MTransaction;
 import com.safepay.fr.safepaySecure.BML.Transaction.MTransactionDetail;
+import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Paiement.ABillingRepository;
 import com.safepay.fr.safepaySecure.DAL.Paiement.APlanRepository;
 import com.safepay.fr.safepaySecure.DAL.Transaction.ATransactionDetailRepository;
@@ -39,7 +40,6 @@ public class LTransactionService {
     ATransactionDetailRepository aTransactionDetailRepository;
     @Autowired
     ABillingRepository aBillingRepository;
-
     @Transactional
     public ReturnMessage addUserBillingPlan(MUserBillingPlan mUserBillingPlan){
         ReturnMessage message = new ReturnMessage();
@@ -52,11 +52,17 @@ public class LTransactionService {
 
                 try {
 
+
                     MBilling billing = new MBilling();
                     billing.setPlan(plan.get());
+                    billing.setMean_of_payment(mUserBillingPlan.getMean_of_payment());
+                    billing.setAddress(mUserBillingPlan.getAddress());
                     billing.setExpriationDate(LocalDate.now().plusDays(30).toString());
                     billing.setActive(true);
                     var bill = aBillingRepository.save(billing);
+                    var currentUser = (MUser) user.get();
+                    currentUser.setBilling(bill);
+                    aUserRepository.save(currentUser);
 
                     try {
 
@@ -72,7 +78,8 @@ public class LTransactionService {
                             transaction.setUser(user.get());
                             transaction.setTransactionType(transactionType.get());
                             transaction.setTransactionDetail(detailTransac);
-                             aTransactionRepository.save(transaction);
+                            var billTransaction = aTransactionRepository.save(transaction);
+                            message.setReturnObject(billTransaction.getId());
                             message.setCode(HttpStatus.ACCEPTED);
                             message.setMessage("Transaction effectuée avec succes !");
 
@@ -99,5 +106,18 @@ public class LTransactionService {
             message.setCode(HttpStatus.BAD_REQUEST);
        }
         return message;
+    }
+
+    public ReturnMessage getAllTransactionById(String id ) {
+        ReturnMessage message = new ReturnMessage();
+        try {
+            message.setReturnObject(aTransactionRepository.findMTransactionByUserId(id));
+            message.setCode(HttpStatus.ACCEPTED);
+        }catch (Exception ex) {
+            message.setMessage(ex.getMessage());
+            message.setCode(HttpStatus.BAD_REQUEST);
+        }
+
+        return  message;
     }
 }
