@@ -13,5 +13,6 @@ public interface AProductRepository  extends JpaRepository<MProduct,String> {
     public int countMProductsByPosterIdAndIsVerify(String id,Boolean verify);
     public int countMProductsByPosterIdAndIsActive(String id , Boolean active);
     public List<MProduct> findMProductsByIsActive(boolean active);
+    public List<MProduct> findMProductsByIsActiveAndIsVerify(boolean active , boolean verify);
 
 }

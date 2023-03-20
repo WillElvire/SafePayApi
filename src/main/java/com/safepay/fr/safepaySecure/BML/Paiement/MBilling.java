@@ -31,8 +31,7 @@ public class MBilling implements Serializable {
     private String mean_of_payment;
     @Column(nullable = true)
     private  String address;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "plan_id" , nullable = false )
     private MPlan plan;

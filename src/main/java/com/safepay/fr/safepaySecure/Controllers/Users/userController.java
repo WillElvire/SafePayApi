@@ -4,8 +4,6 @@ import com.safepay.fr.safepaySecure.BLL.Users.LUserService;
 import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
-import com.safepay.fr.safepaySecure.BML.Users.MUser;
-import com.safepay.fr.safepaySecure.Utils.jwt.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

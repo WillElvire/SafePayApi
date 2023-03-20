@@ -62,7 +62,7 @@ public class MUser  implements Serializable {
     private  Boolean isActive;
     @Column(name = "isCeritifed" , nullable = true)
     private Boolean isCertifed;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private MRole role;
 
 

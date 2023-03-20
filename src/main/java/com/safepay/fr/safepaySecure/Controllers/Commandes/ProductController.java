@@ -29,7 +29,17 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<ReturnMessage> gets(){
-        ReturnMessage message = lProductService.findAll();
+        ReturnMessage message = lProductService.getAllTransactionAndUser(true,false);
+        if(message.getCode() == HttpStatus.ACCEPTED) {
+            return ResponseEntity.ok().body(message);
+        } else {
+            return ResponseEntity.status(message.getCode()).body(message);
+        }
+    }
+
+    @GetMapping("notification")
+    public ResponseEntity<ReturnMessage> notification(){
+        ReturnMessage message = lProductService.getAllTransactionAndUser(false,false);
         if(message.getCode() == HttpStatus.ACCEPTED) {
             return ResponseEntity.ok().body(message);
         } else {

@@ -5,6 +5,9 @@ import com.safepay.fr.safepaySecure.BML.Commande.Dto.MFullProductDetailDto;
 import com.safepay.fr.safepaySecure.BML.Commande.MProduct;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
+import com.safepay.fr.safepaySecure.BML.Payload.MUserProduct;
+import com.safepay.fr.safepaySecure.BML.Payload.MUserPublication;
+import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.ADetailRepository;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
@@ -12,6 +15,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LProductService implements IService<MProduct> {
@@ -64,7 +71,6 @@ public class LProductService implements IService<MProduct> {
     public ReturnMessage findAll() {
         ReturnMessage message = new ReturnMessage();
         try{
-
             message.setReturnObject(aProductRepository.findAll());
             message.setCode(HttpStatus.ACCEPTED);
         }catch (Exception e) {
@@ -74,6 +80,35 @@ public class LProductService implements IService<MProduct> {
 
         return message;
 
+    }
+
+
+    public  ReturnMessage getAllTransactionAndUser(boolean active , boolean verify ) {
+        ReturnMessage message = new ReturnMessage();
+        List<MUserPublication> mUserPublications = new ArrayList<>();
+        List<MProduct> mProductList;
+        try {
+            mProductList = aProductRepository.findMProductsByIsActiveAndIsVerify(active,verify);
+            mProductList.forEach((product)-> {
+               var user = aUserRepository.findById(product.getPoster().getId());
+               if(user.isPresent()) {
+                   var currentUser = user.get();
+                   MUserPublication mUserPublication = new MUserPublication();
+                   mUserPublication.setProduct(product);
+                   mUserPublication.setLastname(currentUser.getLastname());
+                   mUserPublication.setFirstname(currentUser.getFirstname());
+                   mUserPublication.setCertifed(currentUser.getIsCertifed());
+                   mUserPublication.setActive(currentUser.getIsActive());
+                   mUserPublications.add(mUserPublication);
+               }
+            });
+            message.setReturnObject(mUserPublications);
+            message.setCode(HttpStatus.ACCEPTED);
+        }catch(Exception ex) {
+            message.setCode(HttpStatus.BAD_REQUEST);
+            message.setMessage(ex.getMessage());
+        }
+        return message;
     }
 
     public ReturnMessage findTop10Publication() {

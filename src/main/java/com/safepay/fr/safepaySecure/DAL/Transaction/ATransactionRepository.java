@@ -8,4 +8,5 @@ import java.util.List;
 public interface ATransactionRepository  extends JpaRepository<MTransaction,String> {
 
     List<MTransaction> findMTransactionByUserId(String id);
+    int countMTransactionByUserId(String id);
 }

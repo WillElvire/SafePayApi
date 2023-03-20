@@ -29,7 +29,7 @@ public class MPlan implements Serializable {
     private  int  duration ;
     private  float price;
     @JsonManagedReference
-    @OneToMany(mappedBy = "plan")
+    @OneToMany(mappedBy = "plan",cascade = CascadeType.ALL)
     private List<MBilling> billing;
     @CreationTimestamp
     @Column(name = "created_at")

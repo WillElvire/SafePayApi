@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface AUserRepository  extends JpaRepository<MUser , String> {
    public MUser findByEmail(String email);
    public int   countByEmailOrPhone(String email,String phone);
@@ -14,5 +16,6 @@ public interface AUserRepository  extends JpaRepository<MUser , String> {
    public int countByPhone(String phone);
    public boolean existsByEmail(String email);
    public boolean existsByPhone(String phone);
+
 
 }

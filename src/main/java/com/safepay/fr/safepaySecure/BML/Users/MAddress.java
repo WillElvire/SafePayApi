@@ -25,7 +25,7 @@ public class MAddress implements Serializable {
     private String address;
     private int status = 1;
     private int priority = 1 ;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "user_id" , nullable = false )
     private MUser user;

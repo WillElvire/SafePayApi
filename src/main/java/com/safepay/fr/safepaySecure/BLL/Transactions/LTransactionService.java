@@ -28,6 +28,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -82,7 +85,10 @@ public class LTransactionService {
             transaction.setTransactionType(transactionType);
             transaction.setTransactionDetail(detailTransac);
             var billTransaction = aTransactionRepository.save(transaction);
-            message.setReturnObject(billTransaction.getId());
+            Map<String, Object> response = new HashMap<>();
+            response.put("User",user);
+            response.put("Ref",billTransaction.getId());
+            message.setReturnObject(response);
             message.setMessage("Transaction effectuée avec succes !");
             message.setCode(HttpStatus.ACCEPTED);
         }catch (Exception ex) {
@@ -143,7 +149,9 @@ public class LTransactionService {
         try {
             var bill = aBillingRepository.save(billing);
             user.setBilling(bill);
-            aUserRepository.save(user);
+            user.setIsCertifed(true);
+            user.setIsActive(true);
+            message.setReturnObject(aUserRepository.save(user));
             message.setCode(HttpStatus.ACCEPTED);
             return message;
         }catch (Exception ex) {
@@ -152,6 +160,7 @@ public class LTransactionService {
             return message;
         }
     }
+
 
 
     public ReturnMessage addUserBillingPlan(MUserBillingPlan mUserBillingPlan) {
@@ -164,19 +173,23 @@ public class LTransactionService {
             Boolean condition = transactionType.isPresent() && plan.isPresent() && user.isPresent();
             if (condition) {
                 message = this.addBillingPlan(billing, mUserBillingPlan, plan.get(),user.get());
+
                 if (message.getCode() != HttpStatus.ACCEPTED) {
                     return message;
                 }
+
                 var bill = (MBilling) message.getReturnObject();
+
                 message = this.addUserBilling(bill, user.get());
                 if (message.getCode() != HttpStatus.ACCEPTED) {
                     return message;
                 }
+                var currentUser = (MUser) message.getReturnObject();
                 message = this.addTransactionDetail(mUserBillingPlan, bill);
                 if (message.getCode() != HttpStatus.ACCEPTED) {
                     return message;
                 }
-                message = this.addTransaction(user.get(), transactionType.get(), (MTransactionDetail) message.getReturnObject());
+                message = this.addTransaction(currentUser, transactionType.get(), (MTransactionDetail) message.getReturnObject());
                 return message;
             }
             message.setMessage("Une erreur est survenue veuillez contacter l'administrateur");

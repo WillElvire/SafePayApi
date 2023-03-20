@@ -7,6 +7,7 @@ import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
 import com.safepay.fr.safepaySecure.BML.Payload.MUserBillingPlan;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
+import com.safepay.fr.safepaySecure.DAL.Transaction.ATransactionRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AAddressRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.ARoleRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
@@ -27,17 +28,19 @@ public class LUserService implements IService<MUser> {
     PasswordEncoder passwordEncoder;
     AAddressRepository addressRepository;
     AProductRepository aProductRepository;
+    ATransactionRepository aTransactionRepository;
 
     ARoleRepository aRoleRepository;
     /*
      * dependency injection
      */
-    LUserService(ARoleRepository aRoleRepository, AUserRepository aUserRepository,AAddressRepository addressRepository , AProductRepository aProductRepository){
+    LUserService(ARoleRepository aRoleRepository, AUserRepository aUserRepository,AAddressRepository addressRepository , AProductRepository aProductRepository,ATransactionRepository aTransactionRepository){
         this.passwordEncoder    = new BCryptPasswordEncoder();
         this.aUserRepository    = aUserRepository;
         this.addressRepository  = addressRepository;
         this.aProductRepository = aProductRepository;
         this.aRoleRepository    = aRoleRepository;
+        this.aTransactionRepository = aTransactionRepository;
     }
 
     //get list
@@ -192,6 +195,7 @@ public class LUserService implements IService<MUser> {
             report.put("u_p_confirmer", this.aProductRepository.countMProductsByPosterIdAndIsActive(id , true));
             report.put("u_address", this.addressRepository.countMAddressByUserId(id));
             report.put("u_p_close",this.aProductRepository.countMProductsByPosterIdAndIsVerify(id , true));
+            report.put("u_t_count",this.aTransactionRepository.countMTransactionByUserId(id));
             message.setCode(HttpStatus.ACCEPTED);
             message.setReturnObject(report);
         }catch(Exception ex) {
