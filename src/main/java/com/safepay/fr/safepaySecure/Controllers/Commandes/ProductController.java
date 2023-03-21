@@ -37,6 +37,15 @@ public class ProductController {
         }
     }
 
+    @GetMapping("{id}/active")
+    public ResponseEntity<ReturnMessage> activeProduct(@PathVariable("id") String id) {
+        ReturnMessage message = lProductService.activePublication(id);
+        if(message.getCode() == HttpStatus.ACCEPTED)  {
+            return ResponseEntity.ok().body(message);
+        }
+        return ResponseEntity.status(message.getCode()).body(message);
+    }
+
     @GetMapping("notification")
     public ResponseEntity<ReturnMessage> notification(){
         ReturnMessage message = lProductService.getAllTransactionAndUser(false,false);

@@ -138,6 +138,28 @@ public class LProductService implements IService<MProduct> {
     }
 
 
+    public  ReturnMessage activePublication(String id) {
+        ReturnMessage message = new ReturnMessage();
+        try{
+
+          var publication = aProductRepository.findById(id);
+          if(publication.isPresent()) {
+              MProduct product = publication.get();
+              product.setActive(true);
+              aProductRepository.save(product);
+              message.setMessage("Publication activé");
+              message.setCode(HttpStatus.ACCEPTED);
+          }else{
+              message.setCode(HttpStatus.BAD_REQUEST);
+              message.setMessage("Erreur lors de la suppression");
+          }
+
+        }catch (Exception e) {
+            message.setCode(HttpStatus.BAD_REQUEST);
+            message.setMessage(e.getMessage());
+        }
+        return message;
+    }
     public ReturnMessage findMProductsByPosterIds(String id) {
         ReturnMessage message = new ReturnMessage();
         try{

@@ -12,6 +12,7 @@ import com.safepay.fr.safepaySecure.DAL.Users.AAddressRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.ARoleRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +30,6 @@ public class LUserService implements IService<MUser> {
     AAddressRepository addressRepository;
     AProductRepository aProductRepository;
     ATransactionRepository aTransactionRepository;
-
     ARoleRepository aRoleRepository;
     /*
      * dependency injection
@@ -204,4 +204,7 @@ public class LUserService implements IService<MUser> {
         }
         return message;
     }
+
+
+
 }

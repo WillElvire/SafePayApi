@@ -1,5 +1,6 @@
 package com.safepay.fr.safepaySecure.Controllers.Users;
 
+import com.safepay.fr.safepaySecure.BLL.Seeder.LUserSeederService;
 import com.safepay.fr.safepaySecure.BLL.Users.LUserService;
 import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
@@ -18,6 +19,13 @@ import java.util.List;
 public class userController {
     @Autowired
     LUserService lUserService;
+    @Autowired
+    LUserSeederService lUserSeederService;
+
+    userController(LUserSeederService lUserSeederService){
+        this.lUserSeederService = lUserSeederService;
+        this.lUserSeederService.CreateAdmin();
+    }
     @GetMapping()
     public ResponseEntity<ReturnMessage> gets() {
         var  message = lUserService.findAll();
