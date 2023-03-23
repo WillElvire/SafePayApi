@@ -2,7 +2,7 @@ package com.safepay.fr.safepaySecure.Controllers.Users;
 
 import com.safepay.fr.safepaySecure.BLL.Seeder.LUserSeederService;
 import com.safepay.fr.safepaySecure.BLL.Users.LUserService;
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")

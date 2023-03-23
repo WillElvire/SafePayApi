@@ -1,6 +1,6 @@
 package com.safepay.fr.safepaySecure.BLL.Users;
 
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MAddressDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MAddressDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
 import com.safepay.fr.safepaySecure.BML.Users.MAddress;
@@ -139,7 +139,12 @@ public class LAddressService  implements IService<MAddress> {
         ReturnMessage message = new ReturnMessage();
         try
         {
-            if(aAddressRepository.findById(id).isPresent()){
+            var addrr = aAddressRepository.findById(id);
+            if(addrr.isPresent()){
+
+                /*MAddress  address = addrr.get();
+                address.setUser(null);
+                aAddressRepository.save(address);*/
                 aAddressRepository.deleteById(id);
                 message.setMessage("Adresse supprimé avec succes");
                 message.setCode(HttpStatus.ACCEPTED);

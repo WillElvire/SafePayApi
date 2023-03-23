@@ -1,7 +1,7 @@
 package com.safepay.fr.safepaySecure.Controllers.Commandes;
 
 import com.safepay.fr.safepaySecure.BLL.Commande.LProductService;
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MFullProductDetailDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MFullProductDetailDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

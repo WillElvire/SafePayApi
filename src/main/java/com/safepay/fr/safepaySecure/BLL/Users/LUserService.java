@@ -1,10 +1,9 @@
 package com.safepay.fr.safepaySecure.BLL.Users;
 
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MRegisterDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MRegisterDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
 import com.safepay.fr.safepaySecure.BML.Payload.MLoginPayload;
-import com.safepay.fr.safepaySecure.BML.Payload.MUserBillingPlan;
 import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
 import com.safepay.fr.safepaySecure.DAL.Transaction.ATransactionRepository;
@@ -12,14 +11,11 @@ import com.safepay.fr.safepaySecure.DAL.Users.AAddressRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.ARoleRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

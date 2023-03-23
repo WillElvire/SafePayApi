@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.repository.cdi.Eager;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -25,9 +27,9 @@ public class MAddress implements Serializable {
     private String address;
     private int status = 1;
     private int priority = 1 ;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    @JoinColumn(name = "user_id" , nullable = false )
+    @JoinColumn(name = "user_id" , nullable = true )
     private MUser user;
     @CreationTimestamp
     @Column(name = "created_at")

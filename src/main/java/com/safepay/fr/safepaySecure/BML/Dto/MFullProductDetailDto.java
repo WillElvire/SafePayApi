@@ -1,4 +1,4 @@
-package com.safepay.fr.safepaySecure.BML.Commande.Dto;
+package com.safepay.fr.safepaySecure.BML.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

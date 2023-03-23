@@ -25,7 +25,7 @@ public class LUserSeederService {
     }
 
     @Transactional
-    public ReturnMessage CreateAdmin() {
+        public ReturnMessage CreateAdmin() {
         ReturnMessage message = new ReturnMessage();
         try {
             MUser mUser = new MUser();

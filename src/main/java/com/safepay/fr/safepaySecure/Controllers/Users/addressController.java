@@ -1,7 +1,7 @@
 package com.safepay.fr.safepaySecure.Controllers.Users;
 
 import com.safepay.fr.safepaySecure.BLL.Users.LAddressService;
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MAddressDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MAddressDto;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

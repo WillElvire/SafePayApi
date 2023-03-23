@@ -1,13 +1,11 @@
 package com.safepay.fr.safepaySecure.BLL.Commande;
 
 import com.safepay.fr.safepaySecure.BML.Commande.MDetail;
-import com.safepay.fr.safepaySecure.BML.Commande.Dto.MFullProductDetailDto;
+import com.safepay.fr.safepaySecure.BML.Dto.MFullProductDetailDto;
 import com.safepay.fr.safepaySecure.BML.Commande.MProduct;
 import com.safepay.fr.safepaySecure.BML.Error.ReturnMessage;
 import com.safepay.fr.safepaySecure.BML.Interface.IService;
-import com.safepay.fr.safepaySecure.BML.Payload.MUserProduct;
 import com.safepay.fr.safepaySecure.BML.Payload.MUserPublication;
-import com.safepay.fr.safepaySecure.BML.Users.MUser;
 import com.safepay.fr.safepaySecure.DAL.Commandes.ADetailRepository;
 import com.safepay.fr.safepaySecure.DAL.Commandes.AProductRepository;
 import com.safepay.fr.safepaySecure.DAL.Users.AUserRepository;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LProductService implements IService<MProduct> {
